@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: mcp-client
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+    mcp:
+      client:
+        sse:
+          connections:
+            boardgamedb: # this is an alias
+              url: http://localhost:3001
+        toolcallback:
+          enabled: true
