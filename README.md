@@ -4,6 +4,9 @@ Monorepo of **Generative AI projects in Java** using **Spring Boot** and **Quark
 
 ### Current modules
 
+- **`multimodal`**  
+  See [`multimodal/README.md`](multimodal/README.md) for a Spring Boot multimodal service (image generation with Spring AI and OpenAI).
+
 - **`mcp-filesystem-client`**  
   See [`mcp/mcp-filesystem-client/README.md`](mcp/mcp-filesystem-client/README.md) for a Spring Boot MCP filesystem client that exposes a REST chat endpoint backed by Google Gemini and MCP filesystem tools.
 
