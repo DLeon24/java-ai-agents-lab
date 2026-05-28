@@ -80,7 +80,7 @@ mvn spring-boot:run
 | `POST` | `/api/image/generate-url` | `prompt` (query) | JSON `{ "url": "...", "prompt": "..." }` |
 | `POST` | `/api/image/generate-png` | `prompt` (query) | `image/png` bytes |
 
-**Swagger UI:** http://localhost:8080/swagger-ui.html  
+**Swagger UI:** http://localhost:8080/swagger-ui/index.html  
 **OpenAPI JSON:** http://localhost:8080/v3/api-docs
 
 ### Example Requests

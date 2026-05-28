@@ -1,14 +1,14 @@
-package com.joedayz.fase6.image;
+package com.dleon.image.service;
 
 public interface ImageService {
 
-    /**
-     * Genera una imagen a partir del prompt y devuelve la URL pública.
-     */
-    String generateImageUrl(String prompt);
+  /**
+   * Generates an image from the prompt and returns the public URL.
+   */
+  String generateImageUrl(String prompt);
 
-    /**
-     * Genera una imagen a partir del prompt y devuelve los bytes PNG.
-     */
-    byte[] generateImageBytes(String prompt);
+  /**
+   * Generates an image from the prompt and returns PNG bytes.
+   */
+  byte[] generateImageBytes(String prompt);
 }

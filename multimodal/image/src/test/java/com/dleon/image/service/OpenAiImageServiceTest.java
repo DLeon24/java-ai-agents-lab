@@ -1,6 +1,6 @@
 package com.dleon.image.service;
 
-import com.dleon.image.service.impl.OpenAiImageService;
+import com.dleon.image.service.impl.OpenAiImageServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.image.ImageModel;
 import org.springframework.ai.image.ImageResponse;
@@ -21,7 +21,7 @@ class OpenAiImageServiceTest {
     when(imageResponse.getResult().getOutput().getB64Json()).thenReturn(null);
     when(imageModel.call(any())).thenReturn(imageResponse);
 
-    OpenAiImageService service = new OpenAiImageService(imageModel);
+    OpenAiImageServiceImpl service = new OpenAiImageServiceImpl(imageModel);
 
     assertThrows(IllegalStateException.class, () -> service.generateImageUrl("sunset"));
   }
@@ -34,7 +34,7 @@ class OpenAiImageServiceTest {
     when(imageResponse.getResult().getOutput().getB64Json()).thenReturn(null);
     when(imageModel.call(any())).thenReturn(imageResponse);
 
-    OpenAiImageService service = new OpenAiImageService(imageModel);
+    OpenAiImageServiceImpl service = new OpenAiImageServiceImpl(imageModel);
 
     assertThrows(IllegalStateException.class, () -> service.generateImageBytes("sunset"));
   }
