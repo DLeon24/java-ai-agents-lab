@@ -1,5 +1,6 @@
 package com.dleon.mcpfilesystemclient.dto;
 
-public record ChatRequest(String message) {
-}
+import jakarta.validation.constraints.NotBlank;
 
+public record ChatRequest(@NotBlank(message = "message must not be blank") String message) {
+}

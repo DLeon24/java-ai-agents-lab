@@ -10,8 +10,9 @@ Accept natural-language messages over HTTP, forward them to Gemini with MCP file
 
 - `POST /api/mcp/chat` — chat with filesystem-aware Gemini responses
 - MCP client (stdio) spawns `@modelcontextprotocol/server-filesystem` via `npx`
-- OpenAPI UI at `/swagger-ui.html`
-- Integration test: `McpFilesystemClientApplicationTests.contextLoads()`
+- OpenAPI UI at `/swagger-ui/index.html` (`/swagger-ui.html` redirects there)
+- Request validation and typed error responses (`400` / `502`)
+- Tests: context load, controller validation, service unit tests
 
 ## Stack
 
@@ -34,14 +35,24 @@ mcp-filesystem-client/
     │   │   ├── dto/
     │   │   │   ├── ChatRequest.java
     │   │   │   └── ChatResponse.java
+    │   │   ├── exception/
+    │   │   │   ├── ApiExceptionHandler.java
+    │   │   │   └── McpGatewayException.java
     │   │   └── service/
-    │   │       └── McpGatewayService.java
+    │   │       ├── McpGatewayService.java
+    │   │       └── impl/
+    │   │           └── McpGatewayServiceImpl.java
     │   └── resources/
     │       ├── application.yml
     │       └── mcp-servers.json
     └── test/
         └── java/com/dleon/mcpfilesystemclient/
-            └── McpFilesystemClientApplicationTests.java
+            ├── McpFilesystemClientApplicationTests.java
+            ├── controller/
+            │   └── McpConsumerControllerValidationTest.java
+            └── service/
+                └── impl/
+                    └── McpGatewayServiceImplTest.java
 ```
 
 ## Prerequisites
@@ -79,7 +90,7 @@ Requires `npx`, the allowed directory, and a valid API key (boots full Spring + 
 |--------|------|------|----------|
 | `POST` | `/api/mcp/chat` | `{ "message": "..." }` | `{ "response": "..." }` |
 
-**Swagger UI:** http://localhost:8080/swagger-ui.html  
+**Swagger UI:** http://localhost:8080/swagger-ui/index.html  
 **OpenAPI JSON:** http://localhost:8080/v3/api-docs
 
 ```bash
