@@ -1,7 +1,7 @@
 package com.dleon.mcpserver.rag;
 
 import com.dleon.mcpserver.repository.GameRepository;
-import com.logaritex.mcp.annotation.McpResource;
+import org.springaicommunity.mcp.annotation.McpResource;
 import io.modelcontextprotocol.spec.McpSchema;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +18,7 @@ public class ResourceProvider {
 
   @McpResource(uri = "games://game-list", name = "Game List",
       description = "A list of games available in the repository")
-  public McpSchema.ReadResourceResult gameListResource(McpSchema.ReadResourceRequest request) {
+  public McpSchema.ReadResourceResult gameListResource() {
     var gameTitles = gameRepository.findAllTitles();
     var gameListText = new StringBuilder();
     for (String title : gameTitles) {
@@ -26,7 +26,8 @@ public class ResourceProvider {
     }
 
     return new McpSchema.ReadResourceResult(List.of(
-        new McpSchema.TextResourceContents(request.uri(), "text/plain", gameListText.toString())));
+        new McpSchema.TextResourceContents("games://game-list", "text/plain",
+            gameListText.toString())));
   }
 
 }
