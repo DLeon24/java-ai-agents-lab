@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @Validated
 @RequestMapping("/api/voice")
-@Tag(name = "Voice", description = "Text-to-Speech y Speech-to-Text con OpenAI")
+@Tag(name = "Voice", description = "Text-to-Speech and Speech-to-Text with OpenAI")
 public class VoiceController {
 
   private final VoiceService voiceService;
@@ -25,13 +25,8 @@ public class VoiceController {
     this.voiceService = voiceService;
   }
 
-  /**
-   * Convierte texto a voz y devuelve el audio en formato MP3.
-   *
-   * Voces disponibles: alloy, echo, fable, onyx, nova, shimmer
-   */
   @Operation(summary = "Text-to-Speech",
-      description = "Convierte texto a audio MP3. Voces disponibles: alloy, echo, fable, onyx, nova, shimmer")
+      description = "Converts text to MP3 audio. Available voices: alloy, echo, fable, onyx, nova, shimmer")
   @PostMapping(value = "/tts", produces = "audio/mpeg")
   public ResponseEntity<Resource> textToSpeech(
       @RequestParam @NotBlank(message = "text must not be blank") String text,
@@ -44,11 +39,8 @@ public class VoiceController {
         .body(audioResource);
   }
 
-  /**
-   * Transcribe un archivo de audio a texto usando Whisper.
-   */
-  @Operation(summary = "Speech-to-Text (Transcripción)",
-      description = "Transcribe un archivo de audio (mp3, wav, m4a, etc.) a texto usando OpenAI Whisper")
+  @Operation(summary = "Speech-to-Text (Transcription)",
+      description = "Transcribes an audio file (mp3, wav, m4a, etc.) to text using OpenAI Whisper")
   @PostMapping(value = "/transcribe", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public TranscriptionResponse transcribe(@RequestPart("audio") MultipartFile audioFile) {
     if (audioFile == null || audioFile.isEmpty()) {
