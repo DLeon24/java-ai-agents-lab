@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: mcp-server
+  main:
+    # STDIO transport uses stdout for MCP; no embedded web server
+    web-application-type: none
+    banner-mode: off
+  datasource:
+    # PostgreSQL datasource (matches compose.yaml)
+    url: jdbc:postgresql://localhost:5432/boardgamedb
+    username: myuser
+    password: secret
+    driver-class-name: org.postgresql.Driver
+  sql:
+    init:
+      # Ensure schema.sql/import.sql run for non-embedded DBs like PostgreSQL
+      mode: always
+  ai:
+    mcp:
+      server:
+        stdio: true
+
+# Avoid writing logs to stdout (reserved for MCP protocol)
+logging:
+  threshold:
+    console: OFF
