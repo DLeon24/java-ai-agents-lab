@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: mcp-client
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+    mcp:
+      client:
+        request-timeout: 30s
+        stdio:
+          connections:
+            boardgamedb:
+              command: java
+              args:
+                - -jar
+                - ${MCP_SERVER_JAR:@mcp.server.jar@}
+        toolcallback:
+          enabled: true
