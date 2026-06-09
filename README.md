@@ -7,6 +7,7 @@ Monorepo of **Generative AI projects in Java** using **Spring Boot** and **Quark
 ```
 java-ai-agents-lab/
 ├── README.md
+├── langchain4j/
 ├── multimodal/
 ├── mcp/
 │   ├── mcp-filesystem-client/
@@ -18,6 +19,7 @@ java-ai-agents-lab/
 
 | Project | Description | Documentation |
 |---------|-------------|---------------|
+| **langchain4j** | Spring Boot tool-calling lab with **LangChain4j** and local **Ollama** (`@Tool` handlers for math, date, country API) | [`langchain4j/README.md`](langchain4j/README.md) |
 | **multimodal** | Spring Boot multimodal service (image generation, vision, voice) with OpenAI and Spring AI | [`multimodal/README.md`](multimodal/README.md) |
 | **mcp-filesystem-client** | Spring Boot MCP client (stdio): REST chat backed by **Google Gemini** and filesystem tools via `npx` | [`mcp/mcp-filesystem-client/README.md`](mcp/mcp-filesystem-client/README.md) |
 | **mcp-sse** | Maven multi-module lab: MCP **server** (SSE + PostgreSQL board-game catalog) and MCP **client** (REST chat with **OpenAI**) | [`mcp/mcp-sse/README.md`](mcp/mcp-sse/README.md) |
