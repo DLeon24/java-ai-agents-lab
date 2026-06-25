@@ -1,0 +1,47 @@
+# PostgreSQL + extensión pgvector (paridad con Quarkus step-06).
+# Arranque: docker compose up -d
+# Puerto 5436 en el host para reducir conflictos con otros Postgres locales.
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_DB: car_rental 
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5436:5432"
+    volumes:
+      - pgvector:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d car_rental" ]
+      interval: 5s
+      timeout: 5s
+      retries: 8
+    restart: unless-stopped
+  jaeger:
+    image: 'jaegertracing/all-in-one:1.57'
+    ports:
+      - '16686:16686'
+      - '4317:4317'
+      - '4318:4318'
+      - '9411:9411'
+
+  prometheus:
+    image: 'prom/prometheus:v2.54.1'
+    ports:
+      - '9090:9090'
+    volumes:
+      - './prometheus-config.yml:/etc/prometheus/prometheus.yml:ro'
+
+  grafana:
+    image: 'grafana/grafana:11.2.0'
+    ports:
+      - '3000:3000'
+    volumes:
+      - 'grafana-storage:/var/lib/grafana'
+
+volumes:
+  pgvector:
+    driver: local
+  grafana-storage: { }

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" type="image/png" href="favicon.ico">
+
+    <script src="/_importmap/dynamic-importmap.js"></script>
+
+    <script type="module">
+        import 'icons/font-awesome.js';
+        import 'components/demo-title.js';
+        import 'components/demo-chat.js';
+        import 'wc-chatbot';
+    </script>
+
+    <link rel="stylesheet" href="fonts/red-hat-font.min.css">
+
+    <title>Car Rental</title>
+
+    <style>
+        :root {
+            --accent-yellow: #f5c518;
+            --accent-blue: #2196f3;
+            --accent-blue-dark: #1976d2;
+            --text-dark: #2d2d2d;
+            --glass-bg: rgba(255, 255, 255, 0.88);
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            width: 100%;
+            min-height: 100vh;
+            font-family: 'Red Hat Text', sans-serif;
+            overflow: hidden;
+            color: var(--text-dark);
+            background: #f5f5f5;
+        }
+
+        .hero-background {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(245, 245, 245, 0.15) 0%,
+                    rgba(245, 245, 245, 0) 45%
+                ),
+                url('images/hero-car-rental.png') no-repeat center center / cover;
+        }
+
+        .page-content {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            pointer-events: none;
+        }
+
+        .page-content > * {
+            pointer-events: auto;
+        }
+
+        .chat-wrapper {
+            position: fixed;
+            inset: 0;
+            z-index: 20;
+            pointer-events: none;
+        }
+
+        .chat-wrapper demo-chat,
+        .chat-wrapper chat-bot {
+            pointer-events: auto;
+        }
+
+        chat-bot {
+            --chatbot-avatar-bg-color: var(--accent-blue);
+            --chatbot-avatar-margin: 10%;
+            --chatbot-header-bg-color: var(--accent-blue);
+            --chatbot-header-title-color: #ffffff;
+            --chatbot-body-bg-color: #fafafa;
+            --chatbot-send-button-color: var(--accent-blue);
+            --chatbot-button-bg-color: var(--accent-blue);
+        }
+
+        chat-bot::part(chat-bubble) {
+            --chat-bubble-avatar-color: var(--accent-blue);
+            --chat-bubble-color: rgba(33, 150, 243, 0.12);
+            --chat-bubble-right-color: rgba(245, 197, 24, 0.25);
+            --chat-bubble-font-color: var(--text-dark);
+            --chat-bubble-font-right-color: var(--text-dark);
+            --chat-bubble-delay: 0.2s;
+        }
+
+        @media (max-width: 768px) {
+            .hero-background {
+                background:
+                    linear-gradient(
+                        180deg,
+                        rgba(245, 245, 245, 0.3) 0%,
+                        rgba(245, 245, 245, 0) 40%
+                    ),
+                    url('images/hero-car-rental.png') no-repeat 65% center / cover;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="hero-background" role="img" aria-label="Car rental hero — red Tesla on a clean studio background"></div>
+
+<div class="page-content">
+    <demo-title></demo-title>
+</div>
+
+<div class="chat-wrapper">
+    <demo-chat>
+        <chat-bot></chat-bot>
+    </demo-chat>
+</div>
+
+</body>
+</html>
