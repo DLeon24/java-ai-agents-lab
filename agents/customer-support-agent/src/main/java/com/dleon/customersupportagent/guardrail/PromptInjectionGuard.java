@@ -16,7 +16,7 @@ public class PromptInjectionGuard {
   }
 
   public void validate(String userMessage) {
-    double score = detectionService.isInjection(userMessage);
+    double score = detectionService.scoreInjectionRisk(userMessage);
     if (score > threshold) {
       throw new PromptInjectionBlockedException("Prompt injection detected");
     }

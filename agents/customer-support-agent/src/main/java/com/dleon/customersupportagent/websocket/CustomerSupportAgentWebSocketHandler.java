@@ -10,6 +10,9 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
+
 @Component
 public class CustomerSupportAgentWebSocketHandler extends TextWebSocketHandler {
 
@@ -31,19 +34,33 @@ public class CustomerSupportAgentWebSocketHandler extends TextWebSocketHandler {
   }
 
   @Override
-  protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+  protected void handleTextMessage(WebSocketSession session, TextMessage message) {
     String userMessage = message.getPayload();
     log.debug("WebSocket [{}] user -> {}", session.getId(), userMessage);
     try {
-      String reply = customerSupportAgent.chat(session.getId(), userMessage);
-      log.debug("WebSocket [{}] agent -> {}", session.getId(), reply);
-      session.sendMessage(new TextMessage(reply));
+      customerSupportAgent.chatStream(session.getId(), userMessage)
+          .subscribe(
+              chunk -> sendChunk(session, chunk),
+              error -> {
+                log.error("Streaming error for session {}", session.getId(), error);
+                sendChunk(session, GENERIC_FAILURE);
+              });
     } catch (PromptInjectionBlockedException e) {
       log.error("Guardrail blocked request: {}", e.getMessage());
-      session.sendMessage(new TextMessage(GUARDRAIL_FAILURE));
-    } catch (Exception e) {
-      log.error("Error calling the LLM", e);
-      session.sendMessage(new TextMessage(GENERIC_FAILURE));
+      sendChunk(session, GUARDRAIL_FAILURE);
+    }
+  }
+
+  private void sendChunk(WebSocketSession session, String chunk) {
+    synchronized (session) {
+      if (!session.isOpen()) {
+        return;
+      }
+      try {
+        session.sendMessage(new TextMessage(chunk));
+      } catch (IOException e) {
+        throw new UncheckedIOException(e);
+      }
     }
   }
 
