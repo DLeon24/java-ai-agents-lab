@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.5.5</version>
+		<relativePath/>
+	</parent>
+
+	<groupId>com.dleon</groupId>
+	<artifactId>car-rental-support</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>car-rental-support</name>
+	<description>Car rental support demo: WebSocket agent + weather MCP server</description>
+
+	<modules>
+		<module>support-agent</module>
+		<module>weather-mcp-server</module>
+	</modules>
+
+	<properties>
+		<java.version>21</java.version>
+		<spring-ai.version>1.0.5</spring-ai.version>
+		<resilience4j.version>2.2.0</resilience4j.version>
+		<mvnpm.importmap.version>1.0.8</mvnpm.importmap.version>
+		<mvnpm.vaadin-webcomponents.version>24.7.2</mvnpm.vaadin-webcomponents.version>
+		<mvnpm.wc-chatbot.version>0.2.1</mvnpm.wc-chatbot.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.ai</groupId>
+				<artifactId>spring-ai-bom</artifactId>
+				<version>${spring-ai.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>io.github.resilience4j</groupId>
+				<artifactId>resilience4j-retry</artifactId>
+				<version>${resilience4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.mvnpm</groupId>
+				<artifactId>importmap</artifactId>
+				<version>${mvnpm.importmap.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.mvnpm.at.mvnpm</groupId>
+				<artifactId>vaadin-webcomponents</artifactId>
+				<version>${mvnpm.vaadin-webcomponents.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.mvnpm</groupId>
+				<artifactId>wc-chatbot</artifactId>
+				<version>${mvnpm.wc-chatbot.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+</project>
