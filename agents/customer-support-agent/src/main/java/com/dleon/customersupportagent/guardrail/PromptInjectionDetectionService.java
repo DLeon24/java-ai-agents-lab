@@ -1,28 +1,28 @@
 package com.dleon.customersupportagent.guardrail;
 
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
-import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.regex.Matcher;
 
-import static com.dleon.customersupportagent.constants.Constants.*;
+import static com.dleon.customersupportagent.constants.Constants.INJECTION_SCORE_PROMPT_TEMPLATE;
+import static com.dleon.customersupportagent.constants.Constants.SCORE_PATTERN;
 
 @Service
 public class PromptInjectionDetectionService {
 
   private final ChatClient detectionClient;
 
-  public PromptInjectionDetectionService(ChatModel chatModel) {
-    this.detectionClient = ChatClient.builder(chatModel).defaultSystem(INPUT_SECURITY_PROMPT)
-        .defaultAdvisors(new SimpleLoggerAdvisor()).build();
+  public PromptInjectionDetectionService(
+      @Qualifier("guardrailChatClient") ChatClient detectionClient) {
+    this.detectionClient = detectionClient;
   }
 
-  public double isInjection(String userQuery) {
-    String raw =
-        detectionClient.prompt().user(INJECTION_SCORE_PROMPT_TEMPLATE.formatted(userQuery)).call()
-            .content();
+  public double scoreInjectionRisk(String userQuery) {
+    String raw = detectionClient.prompt()
+        .user(spec -> spec.text(INJECTION_SCORE_PROMPT_TEMPLATE).param("user_query", userQuery))
+        .call().content();
     return parseScore(raw);
   }
 

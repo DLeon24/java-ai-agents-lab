@@ -15,6 +15,11 @@ spring:
       embedding:
         options:
           model: text-embedding-3-small
+    chat:
+      memory:
+        repository:
+          jdbc:
+            initialize-schema: always
     mcp:
       client:
         enabled: true
@@ -49,11 +54,14 @@ app:
     max-results: 3
   # Chat memory
   chat:
+    logging:
+      enabled: true
     memory:
       max-messages: 20
   guardrail:
     prompt-injection:
       threshold: 0.7
+      temperature: 0.0
   # Fault tolerance - RetryId
   retry:
     id: llmChat

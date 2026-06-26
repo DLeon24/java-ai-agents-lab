@@ -14,5 +14,4 @@ public class TracingConfig {
   public OtlpGrpcSpanExporter otlpGrpcSpanExporter(@Value("${otlp.tracing.url}") String url) {
     return OtlpGrpcSpanExporter.builder().setEndpoint(url).build();
   }
-
 }

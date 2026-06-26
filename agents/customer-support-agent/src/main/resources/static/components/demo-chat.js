@@ -1,4 +1,4 @@
-import {css, LitElement} from 'lit';
+import { css, LitElement } from 'lit';
 import '@vaadin/icon';
 import '@vaadin/button';
 import '@vaadin/text-field';
@@ -12,7 +12,7 @@ import '@vaadin/grid/vaadin-grid-sort-column.js';
 
 export class DemoChat extends LitElement {
 
-    _stripHtml(html)   {
+    _stripHtml(html) {
         const div = document.createElement("div");
         div.innerHTML = html;
         return div.textContent || div.innerText || "";
@@ -63,7 +63,7 @@ export class DemoChat extends LitElement {
             const protocol = (window.location.protocol === 'https:') ? 'wss' : 'ws';
             const ws = new WebSocket(protocol + '://' + window.location.host + '/customer-support-agent');
 
-            ws.onopen = function() {
+            ws.onopen = function () {
                 // If this is a reconnection, show reconnected message
                 const isReconnection = reconnectAttempts > 0;
 
@@ -93,8 +93,8 @@ export class DemoChat extends LitElement {
                 if (chatBot.messages.length > 0) {
                     lastMessage = chatBot.messages[chatBot.messages.length - 1];
                 }
-                if (lastMessage && lastMessage.sender.name === "Bot"  && ! lastMessage.loading) {
-                    if (! lastMessage.msg) {
+                if (lastMessage && lastMessage.sender.name === "Bot" && !lastMessage.loading) {
+                    if (!lastMessage.msg) {
                         lastMessage.msg = "";
                     }
                     lastMessage.msg += event.data;
@@ -116,11 +116,11 @@ export class DemoChat extends LitElement {
                 }
             };
 
-            ws.onclose = function(event) {
+            ws.onclose = function (event) {
                 handleDisconnection();
             };
 
-            ws.onerror = function(error) {
+            ws.onerror = function (error) {
                 console.error('WebSocket error:', error);
             };
 
@@ -143,7 +143,7 @@ export class DemoChat extends LitElement {
                 }
 
                 reconnectAttempts++;
-                reconnectTimer = setTimeout(function() {
+                reconnectTimer = setTimeout(function () {
                     socket = createWebSocket();
                 }, RECONNECT_INTERVAL);
             } else {

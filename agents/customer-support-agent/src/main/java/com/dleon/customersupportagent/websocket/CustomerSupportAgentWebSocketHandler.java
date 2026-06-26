@@ -13,8 +13,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 @Component
 public class CustomerSupportAgentWebSocketHandler extends TextWebSocketHandler {
 
-  private static final Logger log =
-      LoggerFactory.getLogger(CustomerSupportAgentWebSocketHandler.class);
+  private static final Logger log = LoggerFactory.getLogger(CustomerSupportAgentWebSocketHandler.class);
   private static final String WELCOME = "Welcome to Car Rental! How can I help you today?";
   private static final String GUARDRAIL_FAILURE = """
       Sorry, I am unable to process your request at the moment. It's not something I'm allowed to do.""";

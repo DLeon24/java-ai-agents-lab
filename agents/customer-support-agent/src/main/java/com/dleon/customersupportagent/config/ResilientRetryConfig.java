@@ -13,8 +13,8 @@ public class ResilientRetryConfig {
 
   @Bean
   public Retry llmChatRetry(@Value("${app.retry.id:llmChat}") String name,
-      @Value("${resilience4j.retry.instances.llmChat.max-attempts:4}") int maxAttempts,
-      @Value("${resilience4j.retry.instances.llmChat.wait-duration:100ms}") Duration waitDuration) {
+      @Value("${resilience4j.retry.instances.llmChat.max-attempts}") int maxAttempts,
+      @Value("${resilience4j.retry.instances.llmChat.wait-duration}") Duration waitDuration) {
     RetryConfig retryConfig =
         RetryConfig.custom().maxAttempts(maxAttempts).waitDuration(waitDuration).build();
     return Retry.of(name, retryConfig);

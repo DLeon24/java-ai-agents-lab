@@ -6,12 +6,14 @@ import org.springframework.ai.document.Document;
 import org.springframework.ai.reader.TextReader;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.ai.vectorstore.VectorStore;
+import org.springframework.ai.vectorstore.pgvector.PgVectorStore;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -42,6 +44,13 @@ public class RagIngestion implements ApplicationRunner {
 
   @Override
   public void run(ApplicationArguments args) throws IOException {
+    int existingDocuments = countStoredDocuments();
+    if (existingDocuments > 0) {
+      log.info("Vector store already contains {} document(s), skipping RAG ingestion",
+          existingDocuments);
+      return;
+    }
+
     String pattern = toClasspathPattern(ragLocation);
     Resource[] resources = resourceResolver.getResources(pattern);
 
@@ -65,6 +74,19 @@ public class RagIngestion implements ApplicationRunner {
     vectorStore.add(segments);
     log.info("Documents ingested successfully ({} files, {} segments)", resources.length,
         segments.size());
+  }
+
+  private int countStoredDocuments() {
+    return vectorStore.getNativeClient()
+        .filter(JdbcTemplate.class::isInstance)
+        .map(JdbcTemplate.class::cast)
+        .map(jdbcTemplate -> {
+          String sql = "SELECT COUNT(*) FROM %s.%s".formatted(PgVectorStore.DEFAULT_SCHEMA_NAME,
+              PgVectorStore.DEFAULT_TABLE_NAME);
+          Integer count = jdbcTemplate.queryForObject(sql, Integer.class);
+          return count != null ? count : 0;
+        })
+        .orElse(0);
   }
 
   private static String toClasspathPattern(String path) {
