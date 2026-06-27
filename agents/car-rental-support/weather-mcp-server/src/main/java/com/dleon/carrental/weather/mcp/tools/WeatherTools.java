@@ -8,8 +8,11 @@ import org.springframework.web.client.RestClient;
 @Service
 public class WeatherTools {
 
-  private final RestClient restClient =
-      RestClient.builder().baseUrl("https://api.open-meteo.com").build();
+  private final RestClient restClient;
+
+  public WeatherTools(RestClient restClient) {
+    this.restClient = restClient;
+  }
 
   @Tool(description = "Get weather forecast for a location.")
   public String getForecast(@ToolParam(description = "Latitude of the location") double latitude,
