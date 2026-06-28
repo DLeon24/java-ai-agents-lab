@@ -62,9 +62,6 @@ app:
     prompt-injection:
       threshold: 0.7
       temperature: 0.0
-  # Fault tolerance - RetryId
-  retry:
-    id: llmChat
 
 # --- Observability ---
 # LLM request/response logging (equiv. log-requests / log-responses)
@@ -96,15 +93,3 @@ otlp:
   tracing:
     enabled: true
     url: http://localhost:4317
-
-# Fault tolerance (equiv. @Timeout @Retry @Fallback)
-resilience4j:
-  retry:
-    instances:
-      llmChat:
-        max-attempts: 4
-        wait-duration: 100ms
-  timelimiter:
-    instances:
-      llmChat:
-        timeout-duration: 60s

@@ -19,7 +19,6 @@ Demonstrate an end-to-end car-rental support assistant with Spring AI: the agent
 - JDBC chat memory (max 20 messages per WebSocket session)
 - Prompt-injection guardrail (dedicated `guardrailChatClient`, threshold `0.7`)
 - Observability: Prometheus metrics, OTLP tracing to Jaeger, structured logs with trace/span IDs
-- Resilience4j retry/timeout configured for LLM (`llmChat` instance)
 - Tests: context load
 
 ### weather-mcp-server (port 8081)
@@ -32,7 +31,7 @@ Demonstrate an end-to-end car-rental support assistant with Spring AI: the agent
 
 ## Stack
 
-Java 21 · Spring Boot 3.5.5 · Spring AI 1.0.5 · OpenAI · PostgreSQL/pgvector · MCP Java SDK (SSE) · Resilience4j · OpenTelemetry · Prometheus · Jaeger · Grafana · Maven · Docker Compose
+Java 21 · Spring Boot 3.5.5 · Spring AI 1.0.5 · OpenAI · PostgreSQL/pgvector · MCP Java SDK (SSE) · OpenTelemetry · Prometheus · Jaeger · Grafana · Maven · Docker Compose
 
 ## Project Structure
 
@@ -54,7 +53,6 @@ car-rental-support/
 │       │   │   │   ├── ChatClientConfig.java
 │       │   │   │   ├── ChatMemoryConfig.java
 │       │   │   │   ├── RagConfig.java
-│       │   │   │   ├── ResilientRetryConfig.java
 │       │   │   │   └── TracingConfig.java
 │       │   │   ├── constants/
 │       │   │   │   └── Constants.java
@@ -72,8 +70,6 @@ car-rental-support/
 │       │   │   ├── repository/
 │       │   │   │   ├── BookingRepository.java
 │       │   │   │   └── CustomerRepository.java
-│       │   │   ├── resilience/
-│       │   │   │   └── ResilientLlmInvoker.java
 │       │   │   ├── tools/
 │       │   │   │   └── BookingTools.java
 │       │   │   ├── web/
@@ -113,18 +109,18 @@ car-rental-support/
 ## Architecture
 
 ```
-┌─────────────┐     WebSocket /support-agent   ┌─────────────┐
-│  Chat UI    │ ◄────────────────────────────► │   Agent     │
-│  :8080      │     streaming OpenAI tokens    │  :8080      │
-└─────────────┘                                └──────┬──────┘
+┌─────────────┐     WebSocket /support-agent    ┌─────────────┐
+│  Chat UI    │ ◄────────────────────────────►  │   Agent     │
+│  :8080      │     streaming OpenAI tokens     │  :8080      │
+└─────────────┘                                 └──────┬──────┘
                                                        │
-         ┌─────────────────────────────────────────────┼──────────────────────┐
-         │ OpenAI API                                │ MCP SSE (weather tools) │
-         ▼                                             ▼                      │
-┌─────────────┐                                ┌─────────────┐               │
-│   OpenAI    │                                │   Weather   │──► Open-Meteo │
-│   API       │                                │  MCP :8081  │               │
-└─────────────┘                                └─────────────┘               │
+         ┌─────────────────────────────────────────────┼───────────────────────┐
+         │ OpenAI API                                  │ MCP SSE(weather tools)│
+         ▼                                             ▼                       │
+┌─────────────┐                                ┌─────────────┐                 │
+│   OpenAI    │                                │   Weather   │──► Open-Meteo   │
+│   API       │                                │  MCP :8081  │                 │
+└─────────────┘                                └─────────────┘                 │
          ▲                                                                     │
          │ embeddings + JDBC                                                   │
          ▼                                                                     │
