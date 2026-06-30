@@ -1,0 +1,18 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: weather-mcp-server
+  ai:
+    mcp:
+      server:
+        name: weather-service
+        version: 1.0.0
+        type: SYNC
+api:
+  base-url: https://api.open-meteo.com
+
+logging:
+  level:
+    io.modelcontextprotocol: INFO

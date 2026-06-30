@@ -1,0 +1,95 @@
+spring:
+  application:
+    name: support-agent
+  # OpenAI
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+      chat:
+        options:
+          model: gpt-4o
+          temperature: 1.0
+          max-tokens: 1000
+        # Chaos testing
+        # base-url: https://api.example.com
+      embedding:
+        options:
+          model: text-embedding-3-small
+    chat:
+      memory:
+        repository:
+          jdbc:
+            initialize-schema: always
+    mcp:
+      client:
+        enabled: true
+        toolcallback:
+          enabled: true
+        sse:
+          connections:
+            weather:
+              url: http://localhost:8081
+  # PostgreSQL
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5436}/${POSTGRES_DB:car_rental}
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+
+server:
+  port: 8080
+
+app:
+  rag:
+    location: classpath:rag/
+    max-segment-size: 100
+    max-overlap-size: 25
+    max-results: 3
+  # Chat memory
+  chat:
+    logging:
+      enabled: true
+    memory:
+      max-messages: 20
+  guardrail:
+    prompt-injection:
+      threshold: 0.7
+      temperature: 0.0
+
+# --- Observability ---
+# LLM request/response logging (equiv. log-requests / log-responses)
+logging:
+  level:
+    org.springframework.ai.openai: DEBUG
+    org.springframework.ai.chat.client: DEBUG
+    org.springframework.ai.chat.client.advisor: DEBUG
+    org.springframework.ai.mcp: DEBUG
+    com.dleon: INFO
+  pattern:
+    console: "%d{HH:mm:ss} %-5p traceId=%X{traceId:-} spanId=%X{spanId:-} [%logger{2}] %msg%n"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  tracing:
+    sampling:
+      probability: 1.0
+
+# OpenTelemetry (OTLP) tracing - Jaeger
+otlp:
+  tracing:
+    enabled: true
+    url: http://localhost:4317
